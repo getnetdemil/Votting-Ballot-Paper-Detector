@@ -1,0 +1,69 @@
+%  The code starts by changing the current working directory to QuestionnairePapers.
+%  Then it loops through all the images in that folder and saves them in a cell array called orginal_images.
+%  It then loops through all of the images again, this time converting them into gray scale and saving them in another cell array called images.
+%  The code then goes on to linear stretch each image using a value of 0.1 before analyzing how well they were stretched with an error rate of 10%.
+%  The code attempts to process all the images in the QuestionnairePapers folder.
+%  The code starts by changing the current working directory to the VotedPapers folder and then looping through all of its contents.
+%  The first line of code, "current=cd;", is used to change the current working directory.
+%  The second line of code, "myfolder=(fullfile(cd,'QuestionnairePapers'));", is used to create a new folder where all of the processed images will be saved in.
+%  The third line of code, "cd(myfolder);," changes back to our previous working directory which was set up in step one.
+%  This step sets up our workspace for this task and allows us access to
+
+
+current=cd; %the current folder
+myfolder=(fullfile(cd,'QuestionnairePapers'));  %folder where the images to be proccessed are.
+cd(myfolder); %  Change current working directory.
+names=dir;
+n=0;
+for i=1:length(names) % loop through the QuestionnairePapers folder
+    if (names(i).bytes>500)  
+        n=n+1;
+    end
+end
+
+orginal_images=cell(1,n);
+images=cell(1,n);
+n=0;
+
+for i=1:length(names) % loop through the input folder
+    if (names(i).bytes>500)  % the images to be processed should have size higher than 500 bytes
+        n=n+1;
+        orginal_images{1,n}=imread(names(i).name);
+        images{1,n}=rgb2gray(orginal_images{1,n}); % convert the images in to gray scale and save the images in cell array for later use
+        
+    end
+end
+cd(current); % back to the previous directory, where the other functions to be used for this task are
+
+
+for i=1:length(images)
+    images{1,i}=stretch_log(images{1,i},0.1);
+end
+
+%  The code starts by declaring the variables that will be used in the program.
+%  The first variable is a string called "images" which contains all of the images to be processed.
+%  The second variable is an integer called "length" which tells how many images are in this list, and it's initialized with 4 because there are four images.
+%  The next line declares a function named processor which takes two arguments: an image and true as input, and returns a number as output.
+%  This function can help you process your data without displaying any image on screen.
+%  Next, we declare another function called collected_response that takes one argument: an integer from 1-4 as input, and returns a number as output (the response).
+%  This function helps us collect responses from our survey questions for later use in our final analysis of results.
+%  The code will process the images and collect the responses from the survey.
+%  The first line of code sets up a for loop that iterates through each image in the list.
+%  The second line of code is where you would put your processor function, which should be defined below.
+%  The third line of code calculates how many responses were collected for each question by multiplying it by 2.
+%  The fourth line prints out all four possible answers to each question on a separate line.
+
+questionnaire_responses=zeros(4,2); % for collecting the responses from the questionnaire
+for i=1:length(images)
+    acum=processor(images{1,i},true); % You may try this.........acum=processor(images{1,i}); .... this will do the task without displaying any image
+    questionnaire_responses=questionnaire_responses+acum;
+end
+
+
+% printing the results
+fprintf('Processed Images %d \n',length(images))
+for i=1:4
+    fprintf('Question %d: A= %d   B= %d \n',i,questionnaire_responses(i,1),questionnaire_responses(i,2))
+end
+
+

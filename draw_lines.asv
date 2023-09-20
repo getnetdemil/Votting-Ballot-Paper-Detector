@@ -1,0 +1,50 @@
+%  The code starts by declaring a function called draw_lines.
+%  This is the function that will be used to draw lines on an image.
+%  The first parameter of this function is a vector containing the coordinates of where you want to start drawing your line, and the second parameter is a vector containing the coordinates of where you want to end drawing your line.
+%  The next part of code starts by creating two vectors: one for valid x values and one for valid y values.
+%  These are then initialized with 0s because they are empty at this point in time.
+%  Then, it loops through all points in r (the number of points) using cosd(theta) and sind(theta).
+%  It then calculates how far west or east each point should go based on its distance from img_d (which represents the center point), which was set as 2 units wide by 1 unit high before looping through all points again so that it can calculate new x-values and y-values for each point after calculating its new position relative to img_d's position.
+%  Next, it checks if any two consecutive points have been found that are both within range (i.e., not too close together or too far apart).
+%  If so, those two
+%  The code creates a function called draw_lines which takes in three arguments: the radius of the circle, the angle in radians and an image.
+%  The function then draws lines from that point to the center of the image.
+
+function [valid_x, valid_y]=draw_lines(r, theta, img_d)
+    ax = gca;
+    x_east  = ax.XLim(2);
+    x_west  = ax.XLim(1);
+    y_north = ax.YLim(1);
+    y_south = ax.YLim(2);
+    
+    for k=1:numel(r)
+        costh = cosd(theta(k));
+        sinth = sind(theta(k));
+
+        y_west  = (r(k)-img_d-1 - x_west  * sinth) / costh;
+        y_east  = (r(k)-img_d-1 - x_east  * sinth) / costh;
+        x_north = (r(k)-img_d-1 - y_north * costh) / sinth;
+        x_south = (r(k)-img_d-1 - y_south * costh) / sinth;
+
+        % validate all coordinates and pick the two valid ones:
+        valid_y = [];
+        valid_x = [];
+        if y_west >= y_north && y_west <= y_south
+            valid_y(end+1) = y_west;
+            valid_x(end+1) = x_west;
+        end
+        if y_east >= y_north && y_east <= y_south
+            valid_y(end+1) = y_east;
+            valid_x(end+1) = x_east;
+        end
+        if x_north >= x_west && x_north <= x_east
+            valid_y(end+1) = y_north;
+            valid_x(end+1) = x_north;
+        end
+        if x_south >= x_west && x_south <= x_east
+            valid_y(end+1) = y_south;
+            valid_x(end+1) = x_south;
+        end     
+
+    end
+end

@@ -1,0 +1,53 @@
+%  The code first creates a column vector of size 1 by using the zeros function.
+%  It then loops through the rows of the matrix TH and assigns each row to a different column.
+%  The code next uses the find_angle function to find the angle between two lines in a coordinate system.
+%  The first line is found by finding the row and column coordinates of line 1, which are column1(1,roww) and columnn(1,column).
+%  Line 2 is then found by finding the row and column coordinates of line 1 plus 1, which are roww+1 and columnn+1.
+%  The code first calculates the column and row coordinates of the lines in the image.
+%  Next, it finds the line that has a value of 200 in its TH column and row.
+%  Finally, it sets the corresponding column and row values in column1 and column2 accordingly.
+
+function angle=find_angle(TH)
+
+% To find the row and column coordinates of lines
+% To find the row and column coordinates of the first line
+
+column1=zeros(1,round(size(TH,1)/2));
+for roww=1:round((size(TH,1)/2))
+    for columnn=1:size(TH,2)
+        if TH(roww,columnn)==255
+            column1(1,roww)=columnn;
+            break;
+        end
+    end
+end
+
+%to find the row and column coordinates of the second line
+
+column2=zeros(1,round(size(TH,1)/2));
+for row=1:round(size(TH,1)/2)
+    for column=1:size(TH,2)
+        if TH(row,column)==200
+            column2(1,row)=column;
+            break;
+        end
+    end
+end
+
+
+%  to find the angle
+for t=1:length(column1)
+    if column1(1,t)~=0
+        selected_row=t;
+        break;
+    end
+end
+
+opp=(column1(1,selected_row)-column2(1,selected_row));
+adj=abs(round(size(TH,1)/2)-selected_row);
+angle=atand(opp/adj);
+end
+
+
+
+
